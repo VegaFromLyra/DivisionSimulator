@@ -43,39 +43,76 @@ namespace DivisionSimulator
         // faster than linear
 
         // For a value like num - 56, den  - 2
-        // result: 2 -> 4 -> 8 -> 16 -> 32 => 62
+        // result: 2 -> 4 -> 16 -> 32 => 62
         // count:  1 -> 2 -> 4 -> 8 -> 16 => 31
 
-        // Since 62 > 56, take last result
-        // NewNumerator = currentNumerator - 30 ( 2 + 4 + 8 + 16) => 26
-        // Recusrse for count + result of Divide(26, 2)
+
+        //prevCount = 0, prevResult = 0, count = 1, result = 2
+
+        //prevCount = 1, prevResult = 2, count = 2, result = 4
+
+        //prevCount = 2, prevResult = 4, count = 4, result = 8
+
+        //prevCount = 3, prevResult = 16, count = 8, result = 16
+
+        //prevCount = 4, prevResult = 16, count = 16, result = 32
+
+        //prevCount = 16, prevResult = 32, count = 32, result = 64
+
+        //16 + FDS(24, 2)
+
+
+        //prevCount = 0, prevResult = 0, count = 1, result = 2
+
+        //prevCount = 1, prevResult = 2, count = 2, result = 4
+
+        //prevCount = 2, prevResult = 4, count = 4, result = 8
+
+        //prevCount = 4, prevResult = 8, count = 8, result = 16
+
+        //prevCount = 8, prevResult = 16, count = 16, result = 32
+
+        //8 + FDS(8, 2)
+
+        //prevCount = 0, prevResult = 0, count = 1, result = 2
+
+        //prevCount = 1, prevResult = 2, count = 2, result = 4
+
+        //prevCount = 2, prevResult = 4, count = 4, result = 8
+
+        //=> 4
+
+        //16 + 8 + 4 => 28
         static int FastDivisionSimulator(int numerator, int denominator)
         {
-           int result = denominator; 
-           int prevResult = 0;
-           int prevCount = 0;
-           int temp = denominator;
+            if (numerator < denominator)
+            {
+                return 0;
+            }
 
-           int count = 1;
+            int result = denominator; 
+            int prevResult = 0;
+            int prevCount = 0;
+            int temp = denominator;
 
-           while (result < numerator)
-           {
-               prevCount = count;
-               prevResult = result;
+            int count = 1;
 
-               count += temp;
+            while (result < numerator)
+            {
+                prevCount = count;
+                prevResult = result;
 
-               temp *= denominator;
+                count += prevCount;
 
-               result += temp;
-           }
+                result = denominator * count;
+            }
 
-           if ((numerator < denominator) || (result == numerator))
-           {
-               return count;
-           }
+            if (result == numerator)
+            {
+                return count;
+            }
 
-           return prevCount + FastDivisionSimulator(numerator - prevResult, denominator);
+            return prevCount + FastDivisionSimulator(numerator - prevResult, denominator);
         }
     }
 }
